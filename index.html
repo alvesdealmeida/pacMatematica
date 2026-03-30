@@ -2,6 +2,22 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
+<!--
+╔══════════════════════════════════════════════════════╗
+║         PAC MATEMATICA  — SOFTWARE EDUCACIONAL       ║
+║  © 2026 [SEBASTIAO ALVES   . Todos os direitos       ║
+║  reservados. Proibida reprodução, distribuição ou    ║
+║  modificação sem autorização expressa por escrito.   ║
+║  Contato: contato.sebastiaoalves@gmail.com           ║
+╚══════════════════════════════════════════════════════╝
+-->
+<!-- Impede que motores de busca indexem o jogo -->
+<meta name="robots" content="noindex, nofollow, noarchive">
+<!-- Impede cache (dificulta cópia offline) -->
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<!-- Remove referenciador ao compartilhar link -->
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>PacMath 🟡 Salve a Bolinha!</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka+One&display=swap" rel="stylesheet">
@@ -134,6 +150,31 @@ body{font-family:'Press Start 2P',monospace;display:flex;align-items:center;just
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(14px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
 
 @media(max-height:600px){.title-canvas-wrap{display:none;}}
+
+/* ── Desativa seleção de texto em todo o jogo ── */
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+/* ── Permite seleção apenas nos inputs ── */
+input, textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+/* ── Marca-d'água visível em prints de tela ── */
+body::before {
+  content: "© 2026 PAC MATEMATICA · Uso educacional exclusivo";
+  position: fixed;
+  bottom: 4px;
+  right: 8px;
+  font-size: 9px;
+  color: rgba(0,0,0,.18);
+  pointer-events: none;
+  z-index: 9999;
+  font-family: monospace;
+  letter-spacing: .5px;
+}
 </style>
 </head>
 <body>
@@ -265,6 +306,105 @@ body{font-family:'Press Start 2P',monospace;display:flex;align-items:center;just
 </div><!-- wrap -->
 
 <script>
+/* ═══════════════════════════════════════
+   PROTEÇÃO DE CÓDIGO — NÃO REMOVER
+   © 2025 [SEU NOME]. Todos os direitos reservados.
+   ═══════════════════════════════════════ */
+(function _protect() {
+
+  /* ── 1. Bloqueia clique direito ── */
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    _showAlert();
+    return false;
+  });
+
+  /* ── 2. Bloqueia atalhos de teclado ── */
+  document.addEventListener('keydown', function(e) {
+    // F12
+    if (e.key === 'F12') {
+      e.preventDefault(); _showAlert(); return false;
+    }
+    // Ctrl+Shift+I/J/C  (DevTools)
+    if (e.ctrlKey && e.shiftKey && ['I','J','C','i','j','c'].includes(e.key)) {
+      e.preventDefault(); _showAlert(); return false;
+    }
+    // Ctrl+U  (ver código fonte)
+    if (e.ctrlKey && ['U','u'].includes(e.key)) {
+      e.preventDefault(); _showAlert(); return false;
+    }
+    // Ctrl+S  (salvar página)
+    if (e.ctrlKey && ['S','s'].includes(e.key)) {
+      e.preventDefault(); _showAlert(); return false;
+    }
+    // Ctrl+P  (imprimir / salvar como PDF)
+    if (e.ctrlKey && ['P','p'].includes(e.key)) {
+      e.preventDefault(); _showAlert(); return false;
+    }
+    // Ctrl+A  (selecionar tudo)
+    if (e.ctrlKey && ['A','a'].includes(e.key)) {
+      e.preventDefault(); return false;
+    }
+  });
+
+  /* ── 3. Detecta DevTools via tamanho da janela ── */
+  setInterval(function() {
+    var diff_w = window.outerWidth  - window.innerWidth;
+    var diff_h = window.outerHeight - window.innerHeight;
+    if (diff_w > 160 || diff_h > 160) {
+      _freezePage();
+    }
+  }, 1500);
+
+  /* ── 4. Bloqueia arrastar imagens/ícones ── */
+  document.addEventListener('dragstart', function(e) {
+    e.preventDefault(); return false;
+  });
+
+  /* ── 5. Bloqueia copiar / colar ── */
+  document.addEventListener('copy',  function(e) { e.preventDefault(); });
+  document.addEventListener('cut',   function(e) { e.preventDefault(); });
+
+  /* ── Funções internas ── */
+  function _showAlert() {
+    var existing = document.getElementById('__prot__');
+    if (existing) return;
+    var el = document.createElement('div');
+    el.id = '__prot__';
+    el.style.cssText =
+      'position:fixed;inset:0;z-index:999999;background:rgba(15,23,42,.96);' +
+      'display:flex;flex-direction:column;align-items:center;justify-content:center;' +
+      'font-family:sans-serif;gap:14px';
+    el.innerHTML =
+      '<div style="font-size:54px">🔒</div>' +
+      '<div style="font-size:21px;font-weight:800;color:#fff">Acesso Restrito</div>' +
+      '<div style="font-size:13px;color:#94a3b8;text-align:center;max-width:280px;line-height:1.6">' +
+        'Este jogo é protegido por direitos autorais.<br>' +
+        '© 2025 [SEU NOME] — Uso educacional exclusivo.' +
+      '</div>' +
+      '<button onclick="document.getElementById('__prot__').remove()" ' +
+        'style="background:#38BDF8;border:none;border-radius:10px;padding:10px 26px;' +
+        'font-size:14px;font-weight:800;color:#0f172a;cursor:pointer;margin-top:6px">' +
+        'Fechar' +
+      '</button>';
+    document.body.appendChild(el);
+    setTimeout(function() {
+      var x = document.getElementById('__prot__');
+      if (x) x.remove();
+    }, 4000);
+  }
+
+  function _freezePage() {
+    document.body.innerHTML =
+      '<div style="position:fixed;inset:0;background:#0f172a;display:flex;' +
+        'align-items:center;justify-content:center;font-family:sans-serif;">' +
+      '<div style="text-align:center;">' +
+        '<div style="font-size:60px">🚫</div>' +
+        '<div style="color:#F87171;font-size:18px;font-weight:800;margin-top:12px">Sessão encerrada</div>' +
+        '<div style="color:#64748b;font-size:13px;margin-top:8px">© 2025 [SEU NOME]</div>' +
+      '</div></div>';
+  }
+})(); /* fim _protect */
 /* ══════════════════════════════════════════════
    AUDIO
 ══════════════════════════════════════════════ */
@@ -1032,6 +1172,40 @@ document.addEventListener('keydown',e=>{
 });
 document.getElementById('player-name').addEventListener('keydown',e=>{if(e.key==='Enter')goToSelect();});
 window.addEventListener('resize',()=>{if(gameRunning)resizeCanvas();});
+
+/* ── Anti-debug: detecta pausa no debugger ── */
+(function _antiDebug() {
+  setInterval(function() {
+    var t0 = performance.now();
+    (function(){}["constructor"]("debugger")());
+    if (performance.now() - t0 > 80) {
+      document.body.innerHTML =
+        '<div style="position:fixed;inset:0;background:#0f172a;display:flex;' +
+          'align-items:center;justify-content:center;font-family:sans-serif;">' +
+        '<div style="text-align:center;">' +
+          '<div style="font-size:60px">🔒</div>' +
+          '<div style="color:#F87171;font-size:18px;font-weight:800;margin-top:12px">Acesso negado</div>' +
+          '<div style="color:#64748b;font-size:13px;margin-top:8px">© 2025 [SEU NOME]</div>' +
+        '</div></div>';
+    }
+  }, 2000);
+})();
+</script>
+on(d){
+    return _host === d || _host.endsWith('.'+d);
+  })) {
+    document.body.innerHTML =
+      '<div style="position:fixed;inset:0;background:#0f172a;display:flex;' +
+        'align-items:center;justify-content:center;font-family:sans-serif;">' +
+      '<div style="text-align:center;color:white;">' +
+        '<div style="font-size:50px">🚫</div>' +
+        '<div style="font-size:18px;margin-top:12px;font-weight:800">Domínio não autorizado</div>' +
+        '<div style="font-size:13px;color:#64748b;margin-top:8px">© 2025 [SEU NOME]</div>' +
+      '</div></div>';
+  }
+  */
+
+})();
 </script>
 </body>
 </html>
